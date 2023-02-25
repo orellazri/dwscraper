@@ -1,4 +1,4 @@
-use std::{error::Error, fs::File, io};
+use std::{error::Error, fs::File, io, path::Path};
 
 use select::{document::Document, predicate::Name};
 
@@ -23,15 +23,19 @@ pub fn find_last_issue_number(document: &Document) -> Option<i32> {
     Some(issue_number)
 }
 
-pub fn download_issue(issue_number: i32) -> Result<(), Box<dyn Error>> {
+pub fn download_issue(issue_number: i32, output_dir: &Path) -> Result<(), Box<dyn Error>> {
     let issue_hex = format!("{:#04x}", issue_number);
     let issue_url = format!(
         "{}/files/Zines/{}/DigitalWhisper{}.pdf",
         SITE_URL, issue_hex, issue_number
     );
 
+    let mut output_path = output_dir.to_path_buf();
+    output_path.push(issue_number.to_string());
+    output_path.set_extension("pdf");
+
     let mut response = reqwest::blocking::get(issue_url)?;
-    let mut output = File::create(format!("{}.pdf", issue_number))?;
+    let mut output = File::create(output_path)?;
     io::copy(&mut response, &mut output)?;
 
     Ok(())
@@ -74,6 +78,7 @@ mod tests {
         assert!(issue_number.is_none());
     }
 
+    // TODO
     // #[test]
     // fn can_download_issue() {
     //     download_issue(1);
