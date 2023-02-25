@@ -7,9 +7,7 @@ use crate::document::SITE_URL;
 
 fn get_issue_number_from_link(issue_link: &str) -> Option<i32> {
     if let Some(index) = issue_link.find("issue") {
-        if let Ok(number) = issue_link[index + "issue".len()..].parse() {
-            return Some(number);
-        }
+        return issue_link[index + "issue".len()..].parse().ok();
     }
 
     None
