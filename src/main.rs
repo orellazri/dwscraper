@@ -39,8 +39,12 @@ fn main() {
 
             if let Some(delim) = issues.find(':') {
                 let document = fetch_document();
-                let last_issue_number =
-                    find_last_issue_number(&document).expect("failed to find last issue number");
+                let last_issue_number = if let Some(number) = find_last_issue_number(&document) {
+                    number
+                } else {
+                    error!("failed to find last issue number");
+                    exit(1);
+                };
 
                 let start: i32 = issues[..delim].parse().unwrap_or(1);
                 let end: i32 = issues[delim + 1..].parse().unwrap_or(last_issue_number);
@@ -54,11 +58,23 @@ fn main() {
                 }
 
                 for issue_number in start..=end {
-                    download_issue(issue_number, &output_dir).expect("failed to download issue");
+                    if let Err(e) = download_issue(issue_number, &output_dir) {
+                        error!("failed to download issue {}", issue_number);
+                        eprintln!("{}", e);
+                    }
                 }
             } else {
-                let issue_number: i32 = issues.parse().expect("failed to parse issue number");
-                download_issue(issue_number, &output_dir).expect("failed to download issue");
+                let issue_number: i32 = if let Ok(number) = issues.parse() {
+                    number
+                } else {
+                    error!("failed to parse issue number");
+                    exit(1);
+                };
+
+                if let Err(e) = download_issue(issue_number, &output_dir) {
+                    error!("failed to download issue {}", issue_number);
+                    eprintln!("{}", e);
+                }
             }
         }
     }
