@@ -71,4 +71,4 @@ Archive all issues:
 dwscraper -o ~/documents archive
 ```
 
-_(This will download all missing issues that don't exist the output directory)_
+_(This will download all missing issues that don't exist in the output directory)_
