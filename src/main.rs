@@ -8,10 +8,20 @@ use clap::Parser;
 use cli::Command;
 use document::fetch_document;
 use issues::{download_issue, find_last_issue_number};
+use log::{error, LevelFilter};
+use simplelog::{ColorChoice, Config, TermLogger, TerminalMode};
 
 use crate::cli::Cli;
 
 fn main() {
+    TermLogger::init(
+        LevelFilter::Info,
+        Config::default(),
+        TerminalMode::Mixed,
+        ColorChoice::Auto,
+    )
+    .unwrap();
+
     let cli = Cli::parse();
 
     match cli.command {
@@ -23,8 +33,8 @@ fn main() {
             };
 
             if !output_dir.is_dir() {
-                eprintln!("output directory does not exist");
-                exit(0);
+                error!("output directory does not exist");
+                exit(1);
             }
 
             if let Some(delim) = issues.find(':') {
@@ -36,7 +46,7 @@ fn main() {
                 let end: i32 = issues[delim + 1..].parse().unwrap_or(last_issue_number);
 
                 if start < 1 || end > last_issue_number {
-                    eprintln!(
+                    error!(
                         "invalid issue range, should be between 1-{}",
                         last_issue_number
                     );

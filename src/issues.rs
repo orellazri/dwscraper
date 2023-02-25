@@ -1,5 +1,6 @@
 use std::{error::Error, fs::File, io, path::Path};
 
+use log::info;
 use select::{document::Document, predicate::Name};
 
 use crate::document::SITE_URL;
@@ -24,6 +25,8 @@ pub fn find_last_issue_number(document: &Document) -> Option<i32> {
 }
 
 pub fn download_issue(issue_number: i32, output_dir: &Path) -> Result<(), Box<dyn Error>> {
+    info!("downloading issue {}", issue_number);
+
     let issue_hex = format!("{:#04x}", issue_number);
     let issue_url = format!(
         "{}/files/Zines/{}/DigitalWhisper{}.pdf",
