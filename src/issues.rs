@@ -6,8 +6,10 @@ use select::{document::Document, predicate::Name};
 use crate::document::SITE_URL;
 
 fn get_issue_number_from_link(issue_link: &str) -> Option<i32> {
-    if let Ok(number) = issue_link[issue_link.find("issue").unwrap() + "issue".len()..].parse() {
-        return Some(number);
+    if let Some(index) = issue_link.find("issue") {
+        if let Ok(number) = issue_link[index + "issue".len()..].parse() {
+            return Some(number);
+        }
     }
 
     None
