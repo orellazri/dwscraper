@@ -33,7 +33,7 @@ Options:
   -V, --version          Print version
 ```
 
-`download`: Specify an issue number, a range (`start:finish`, inclusive, or `last` for last issue)
+`download`: Specify an issue number, a range (`start:finish`, inclusive), or `last` for last issue
 
 For example:
 
@@ -44,4 +44,4 @@ For example:
 - `20:` - All issues above #20
 - `last` - Last issue
 
-`archive`: Will download all missing issues in the output directory
+`archive`: Download all missing issues in the output directory
