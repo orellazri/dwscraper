@@ -31,6 +31,12 @@ Download issue #5:
 dwscraper download 5
 ```
 
+Download to a specific directory:
+
+```bash
+dwscraper -o ~/issues download 5
+```
+
 Download issues 4,5,6,7:
 
 ```bash
