@@ -3,13 +3,12 @@ use select::document::Document;
 pub const SITE_URL: &str = "https://www.digitalwhisper.co.il";
 
 pub fn fetch_document() -> Document {
-    // let response = reqwest::blocking::get(SITE_URL)
-    //     .expect("failed to load website")
-    //     .text()
-    //     .expect("failed to decode website content");
-    // fs::write("output.txt", resp).unwrap();
+    let response = reqwest::blocking::get(SITE_URL)
+        .expect("failed to load website")
+        .text()
+        .expect("failed to decode website content");
 
-    Document::from(include_str!("../output.txt"))
+    Document::from(response.as_ref())
 }
 
 #[cfg(test)]
@@ -18,6 +17,7 @@ mod tests {
 
     #[test]
     fn can_fetch_document() {
-        fetch_document();
+        let document = fetch_document();
+        assert!(!document.nodes.is_empty());
     }
 }
