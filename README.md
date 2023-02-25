@@ -33,6 +33,8 @@ Options:
   -V, --version          Print version
 ```
 
+_**Note:** By default, the output directory is the current directory. You can change that with the `-o` flag_
+
 `download`: Specify an issue number, a range (`start:finish`, inclusive), or `last` for last issue
 
 For example:
