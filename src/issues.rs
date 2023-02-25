@@ -46,7 +46,7 @@ pub fn download_issue(issue_number: i32, output_dir: &Path) -> Result<(), Box<dy
 
 #[cfg(test)]
 mod tests {
-    use std::env::temp_dir;
+    use std::{env::temp_dir, os::unix::prelude::MetadataExt};
 
     use crate::document;
 
@@ -92,5 +92,18 @@ mod tests {
         output_file.push("1");
         output_file.set_extension("pdf");
         assert!(output_file.is_file());
+        assert!(output_file.metadata().unwrap().size() > 1000);
+    }
+
+    #[test]
+    fn can_download_issue_with_uppercase_hex() {
+        let output_dir = temp_dir();
+        assert!(download_issue(12, &output_dir).is_ok());
+
+        let mut output_file = output_dir;
+        output_file.push("12");
+        output_file.set_extension("pdf");
+        assert!(output_file.is_file());
+        assert!(output_file.metadata().unwrap().size() > 1000);
     }
 }
