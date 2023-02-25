@@ -17,10 +17,8 @@ pub struct Cli {
 #[derive(Subcommand)]
 pub enum Command {
     /// Download issues
-    Download {
-        issues: String,
-    },
+    Download { issues: String },
 
-    // Archive all issues
+    /// Archive all issues
     Archive,
 }
