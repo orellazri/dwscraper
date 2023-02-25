@@ -1,14 +1,13 @@
+use std::error::Error;
+
 use select::document::Document;
 
 pub const SITE_URL: &str = "https://www.digitalwhisper.co.il";
 
-pub fn fetch_document() -> Document {
-    let response = reqwest::blocking::get(SITE_URL)
-        .expect("failed to load website")
-        .text()
-        .expect("failed to decode website content");
+pub fn fetch_document() -> Result<Document, Box<dyn Error>> {
+    let response = reqwest::blocking::get(SITE_URL)?.text()?;
 
-    Document::from(response.as_ref())
+    Ok(Document::from(response.as_ref()))
 }
 
 #[cfg(test)]
@@ -17,7 +16,7 @@ mod tests {
 
     #[test]
     fn can_fetch_document() {
-        let document = fetch_document();
+        let document = fetch_document().unwrap();
         assert!(!document.nodes.is_empty());
     }
 }

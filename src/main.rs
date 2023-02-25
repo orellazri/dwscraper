@@ -38,7 +38,13 @@ fn main() {
             }
 
             if let Some(delim) = issues.find(':') {
-                let document = fetch_document();
+                let document = if let Ok(doc) = fetch_document() {
+                    doc
+                } else {
+                    error!("failed to fetch website content");
+                    exit(1);
+                };
+
                 let last_issue_number = if let Some(number) = find_last_issue_number(&document) {
                     number
                 } else {

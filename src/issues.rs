@@ -78,7 +78,7 @@ mod tests {
 
     #[test]
     fn can_find_last_issue_number() {
-        let document = document::fetch_document();
+        let document = document::fetch_document().unwrap();
         let last_issue_number = find_last_issue_number(&document);
         assert!(last_issue_number.is_some());
     }
