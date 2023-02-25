@@ -25,6 +25,8 @@ dwscraper --help
 
 ## Examples
 
+### Download
+
 Download issue #5:
 
 ```bash
@@ -60,3 +62,13 @@ Download all issues under 50:
 ```bash
 dwscraper download :50
 ```
+
+### Archive
+
+Archive all issues:
+
+```bash
+dwscraper -o ~/documents archive
+```
+
+_(This will download all missing issues that don't exist the output directory)_
