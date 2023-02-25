@@ -50,13 +50,6 @@ mod tests {
     use super::*;
 
     #[test]
-    fn can_find_last_issue_number() {
-        let document = document::fetch_document();
-        let last_issue_number = find_last_issue_number(&document);
-        assert!(last_issue_number.is_some());
-    }
-
-    #[test]
     fn can_get_valid_issue_number_from_link() {
         let issue_url = format!("{}/issue1", SITE_URL);
 
@@ -78,6 +71,13 @@ mod tests {
         let issue_url = format!("{}/issue1a", SITE_URL);
         let issue_number = get_issue_number_from_link(&issue_url);
         assert!(issue_number.is_none());
+    }
+
+    #[test]
+    fn can_find_last_issue_number() {
+        let document = document::fetch_document();
+        let last_issue_number = find_last_issue_number(&document);
+        assert!(last_issue_number.is_some());
     }
 
     #[test]
