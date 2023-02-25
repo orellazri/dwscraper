@@ -1,6 +1,10 @@
+<div align="center">
+
 # dwscraper
 
 This is a scraper for the Digital Whisper website which allows you to download issues.
+
+</div>
 
 ## Build
 
