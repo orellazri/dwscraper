@@ -20,55 +20,28 @@ cargo build
 ## Usage
 
 ```bash
-dwscraper --help
+Usage: dwscraper [OPTIONS] <COMMAND>
+
+Commands:
+  download  Download issues
+  archive
+  help      Print this message or the help of the given subcommand(s)
+
+Options:
+  -o, --output <OUTPUT>  Output directory
+  -h, --help             Print help
+  -V, --version          Print version
 ```
 
-## Examples
+`download`: Specify an issue number, a range (`start:finish`, inclusive, or `last` for last issue)
 
-### Download
+For example:
 
-Download issue #5:
+- `5` - Issue #5
+- `7:10` - Issues 7,8,9,10
+- `:` - All issues
+- `:10` - First 10 issues
+- `20:` - All issues above #20
+- `last` - Last issue
 
-```bash
-dwscraper download 5
-```
-
-Download to a specific directory:
-
-```bash
-dwscraper -o ~/issues download 5
-```
-
-Download issues 4,5,6,7:
-
-```bash
-dwscraper download 4:7
-```
-
-Download all issues:
-
-```bash
-dwscraper download :
-```
-
-Download issues 100 and above:
-
-```bash
-dwscraper download 100:
-```
-
-Download all issues under 50:
-
-```bash
-dwscraper download :50
-```
-
-### Archive
-
-Archive all issues:
-
-```bash
-dwscraper -o ~/documents archive
-```
-
-_(This will download all missing issues that don't exist in the output directory)_
+`archive`: Will download all missing issues in the output directory
