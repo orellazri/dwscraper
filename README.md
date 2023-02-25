@@ -2,7 +2,7 @@
 
 # dwscraper
 
-[![Rust](https://github.com/orellazri/dwscraper/actions/workflows/test.yml/badge.svg)](https://github.com/orellazri/dwscraper/actions/workflows/test.yml)
+[![Tests](https://github.com/orellazri/dwscraper/actions/workflows/tests.yml/badge.svg)](https://github.com/orellazri/dwscraper/actions/workflows/tests.yml)
 
 This is a scraper for the [Digital Whisper](https://digitalwhisper.co.il) website. It allows you to download issues.
 
