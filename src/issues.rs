@@ -43,6 +43,8 @@ pub fn download_issue(issue_number: i32, output_dir: &Path) -> Result<(), Box<dy
 
 #[cfg(test)]
 mod tests {
+    use std::env::temp_dir;
+
     use crate::document;
 
     use super::*;
@@ -78,9 +80,14 @@ mod tests {
         assert!(issue_number.is_none());
     }
 
-    // TODO
-    // #[test]
-    // fn can_download_issue() {
-    //     download_issue(1);
-    // }
+    #[test]
+    fn can_download_issue() {
+        let output_dir = temp_dir();
+        assert!(download_issue(1, &output_dir).is_ok());
+
+        let mut output_file = output_dir;
+        output_file.push("1");
+        output_file.set_extension("pdf");
+        assert!(output_file.is_file());
+    }
 }
