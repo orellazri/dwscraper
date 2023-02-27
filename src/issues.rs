@@ -46,11 +46,21 @@ pub fn download_issue(issue_number: i32, output_dir: &Path) -> Result<(), Box<dy
 
 #[cfg(test)]
 mod tests {
-    use std::{env::temp_dir, os::unix::prelude::MetadataExt};
+    use std::{env::temp_dir, fs, os::unix::prelude::MetadataExt};
 
     use crate::document;
 
     use super::*;
+
+    fn check_pdf_file_is_valid(file: &Path) -> bool {
+        let contents = fs::read(file).unwrap();
+
+        contents[0] == 0x25
+            && contents[1] == 0x50
+            && contents[2] == 0x44
+            && contents[3] == 0x46
+            && contents[4] == 0x2D
+    }
 
     #[test]
     fn can_get_valid_issue_number_from_link() {
@@ -93,6 +103,7 @@ mod tests {
         output_file.set_extension("pdf");
         assert!(output_file.is_file());
         assert!(output_file.metadata().unwrap().size() > 1000);
+        assert!(check_pdf_file_is_valid(&output_file));
     }
 
     #[test]
@@ -105,5 +116,6 @@ mod tests {
         output_file.set_extension("pdf");
         assert!(output_file.is_file());
         assert!(output_file.metadata().unwrap().size() > 1000);
+        assert!(check_pdf_file_is_valid(&output_file));
     }
 }
