@@ -25,13 +25,10 @@ pub fn find_last_issue_number(document: &Document) -> Option<i32> {
 }
 
 pub fn download_issue(issue_number: i32, output_dir: &Path) -> Result<(), Box<dyn Error>> {
-    info!("downloading issue {}", issue_number);
+    info!("downloading issue {issue_number}");
 
     let issue_hex = format!("{:#04X}", issue_number);
-    let issue_url = format!(
-        "{}/files/Zines/{}/DigitalWhisper{}.pdf",
-        SITE_URL, issue_hex, issue_number
-    );
+    let issue_url = format!("{SITE_URL}/files/Zines/{issue_hex}/DigitalWhisper{issue_number}.pdf",);
 
     let mut output_path = output_dir.to_path_buf();
     output_path.push(issue_number.to_string());
@@ -55,16 +52,12 @@ mod tests {
     fn check_pdf_file_is_valid(file: &Path) -> bool {
         let contents = fs::read(file).unwrap();
 
-        contents[0] == 0x25
-            && contents[1] == 0x50
-            && contents[2] == 0x44
-            && contents[3] == 0x46
-            && contents[4] == 0x2D
+        contents[0] == 0x25 && contents[1] == 0x50 && contents[2] == 0x44 && contents[3] == 0x46 && contents[4] == 0x2D
     }
 
     #[test]
     fn can_get_valid_issue_number_from_link() {
-        let issue_url = format!("{}/issue1", SITE_URL);
+        let issue_url = format!("{SITE_URL}/issue1");
 
         let issue_number = get_issue_number_from_link(&issue_url);
         assert!(issue_number.is_some());
@@ -73,15 +66,15 @@ mod tests {
 
     #[test]
     fn can_get_invalid_issue_number_from_link() {
-        let issue_url = format!("{}/issue", SITE_URL);
+        let issue_url = format!("{SITE_URL}/issue");
         let issue_number = get_issue_number_from_link(&issue_url);
         assert!(issue_number.is_none());
 
-        let issue_url = format!("{}/issuenothing", SITE_URL);
+        let issue_url = format!("{SITE_URL}/issuenothing");
         let issue_number = get_issue_number_from_link(&issue_url);
         assert!(issue_number.is_none());
 
-        let issue_url = format!("{}/issue1a", SITE_URL);
+        let issue_url = format!("{SITE_URL}/issue1a");
         let issue_number = get_issue_number_from_link(&issue_url);
         assert!(issue_number.is_none());
     }

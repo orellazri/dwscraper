@@ -18,14 +18,14 @@ fn download_range(issues: String, delim: usize, output_dir: &Path, last_issue_nu
     let end: i32 = issues[delim + 1..].parse().unwrap_or(last_issue_number);
 
     if start < 1 || end > last_issue_number {
-        error!("invalid issue range, should be between 1-{}", last_issue_number);
+        error!("invalid issue range, should be between 1-{last_issue_number}");
         exit(1);
     }
 
     for issue_number in start..=end {
         download_issue(issue_number, output_dir).unwrap_or_else(|err| {
-            error!("failed to download issue {}", issue_number);
-            eprintln!("{}", err);
+            error!("failed to download issue {issue_number}");
+            eprintln!("{err}");
         });
     }
 }
@@ -41,8 +41,8 @@ fn download_single(issues: String, output_dir: &Path, last_issue_number: i32) {
     };
 
     download_issue(issue_number, output_dir).unwrap_or_else(|err| {
-        error!("failed to download issue {}", issue_number);
-        eprintln!("{}", err);
+        error!("failed to download issue {issue_number}");
+        eprintln!("{err}");
     });
 }
 
@@ -72,8 +72,8 @@ fn archive_issues(output_dir: &Path, last_issue_number: i32) {
     for issue_number in 1..=last_issue_number {
         if !existing_issues.contains(&issue_number) {
             download_issue(issue_number, output_dir).unwrap_or_else(|err| {
-                error!("failed to download issue {}", issue_number);
-                eprintln!("{}", err);
+                error!("failed to download issue {issue_number}");
+                eprintln!("{err}");
             });
         }
     }
