@@ -18,18 +18,15 @@ fn download_range(issues: String, delim: usize, output_dir: &Path, last_issue_nu
     let end: i32 = issues[delim + 1..].parse().unwrap_or(last_issue_number);
 
     if start < 1 || end > last_issue_number {
-        error!(
-            "invalid issue range, should be between 1-{}",
-            last_issue_number
-        );
+        error!("invalid issue range, should be between 1-{}", last_issue_number);
         exit(1);
     }
 
     for issue_number in start..=end {
-        if let Err(e) = download_issue(issue_number, output_dir) {
+        download_issue(issue_number, output_dir).unwrap_or_else(|err| {
             error!("failed to download issue {}", issue_number);
-            eprintln!("{}", e);
-        }
+            eprintln!("{}", err);
+        });
     }
 }
 
@@ -43,10 +40,10 @@ fn download_single(issues: String, output_dir: &Path, last_issue_number: i32) {
         exit(1);
     };
 
-    if let Err(e) = download_issue(issue_number, output_dir) {
+    download_issue(issue_number, output_dir).unwrap_or_else(|err| {
         error!("failed to download issue {}", issue_number);
-        eprintln!("{}", e);
-    }
+        eprintln!("{}", err);
+    });
 }
 
 fn archive_issues(output_dir: &Path, last_issue_number: i32) {
@@ -74,22 +71,16 @@ fn archive_issues(output_dir: &Path, last_issue_number: i32) {
     // Download missing issues
     for issue_number in 1..=last_issue_number {
         if !existing_issues.contains(&issue_number) {
-            if let Err(e) = download_issue(issue_number, output_dir) {
+            download_issue(issue_number, output_dir).unwrap_or_else(|err| {
                 error!("failed to download issue {}", issue_number);
-                eprintln!("{}", e);
-            }
+                eprintln!("{}", err);
+            });
         }
     }
 }
 
 fn main() {
-    TermLogger::init(
-        LevelFilter::Info,
-        Config::default(),
-        TerminalMode::Mixed,
-        ColorChoice::Auto,
-    )
-    .unwrap();
+    TermLogger::init(LevelFilter::Info, Config::default(), TerminalMode::Mixed, ColorChoice::Auto).unwrap();
 
     let cli = Cli::parse();
 
@@ -104,19 +95,15 @@ fn main() {
         exit(1);
     }
 
-    let document = if let Ok(doc) = fetch_document() {
-        doc
-    } else {
+    let document = fetch_document().unwrap_or_else(|_| {
         error!("failed to fetch website content");
         exit(1);
-    };
+    });
 
-    let last_issue_number = if let Some(number) = find_last_issue_number(&document) {
-        number
-    } else {
+    let last_issue_number = find_last_issue_number(&document).unwrap_or_else(|| {
         error!("failed to find last issue number");
         exit(1);
-    };
+    });
 
     // Run relevant command
     match cli.command {
