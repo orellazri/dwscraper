@@ -4,6 +4,7 @@ mod issues;
 
 use std::{env::current_dir, fs, path::Path, process::exit};
 
+use rayon::prelude::*;
 use clap::Parser;
 use cli::Command;
 use document::fetch_document;
@@ -22,12 +23,13 @@ fn download_range(issues: String, delim: usize, output_dir: &Path, last_issue_nu
         exit(1);
     }
 
-    for issue_number in start..=end {
+
+    (start..=end).into_par_iter().for_each(|issue_number| {
         download_issue(issue_number, output_dir).unwrap_or_else(|err| {
             error!("failed to download issue {issue_number}");
             eprintln!("{err}");
         });
-    }
+    });
 }
 
 fn download_single(issues: String, output_dir: &Path, last_issue_number: i32) {
@@ -69,14 +71,14 @@ fn archive_issues(output_dir: &Path, last_issue_number: i32) {
     );
 
     // Download missing issues
-    for issue_number in 1..=last_issue_number {
+    (1..=last_issue_number).into_par_iter().for_each(|issue_number| {
         if !existing_issues.contains(&issue_number) {
             download_issue(issue_number, output_dir).unwrap_or_else(|err| {
                 error!("failed to download issue {issue_number}");
                 eprintln!("{err}");
             });
         }
-    }
+    });
 }
 
 fn main() {
