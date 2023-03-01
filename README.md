@@ -8,14 +8,18 @@ This is a scraper for the [Digital Whisper](https://digitalwhisper.co.il) websit
 
 </div>
 
+It uses Rayon for data parallelism, making it extremely fast - capabale of downloading an issue in an average of ~70ms (when downloading a large amount - i.e. archiving)
+
 ## Build
 
 1. Clone the repository
 2. Run:
 
 ```bash
-cargo build
+cargo build --release
 ```
+
+3. By default, the resulting binary will be located in `target/release/dwscraper`
 
 ## Usage
 
