@@ -4,12 +4,12 @@ mod issues;
 
 use std::{env::current_dir, fs, path::Path, process::exit};
 
-use rayon::prelude::*;
 use clap::Parser;
 use cli::Command;
 use document::fetch_document;
 use issues::{download_issue, find_last_issue_number};
 use log::{error, info, LevelFilter};
+use rayon::prelude::*;
 use simplelog::{ColorChoice, Config, TermLogger, TerminalMode};
 
 use crate::cli::Cli;
@@ -22,7 +22,6 @@ fn download_range(issues: String, delim: usize, output_dir: &Path, last_issue_nu
         error!("invalid issue range, should be between 1-{last_issue_number}");
         exit(1);
     }
-
 
     (start..=end).into_par_iter().for_each(|issue_number| {
         download_issue(issue_number, output_dir).unwrap_or_else(|err| {
