@@ -10,6 +10,11 @@ This is a scraper for the [Digital Whisper](https://digitalwhisper.co.il) websit
 
 It uses Rayon for data parallelism, making it extremely fast - capabale of downloading an issue in an average of <100ms (when downloading a large amount - i.e. archiving)
 
+## Download
+You can download the latest release for linux from the [releases page](https://github.com/orellazri/dwscraper/releases).
+
+For other platforms, you can build the binary from the source code.
+
 ## Build
 
 1. Clone the repository
